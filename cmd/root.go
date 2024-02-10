@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
 	"github.com/christian-doucette/time-to-go/internal/gtfs"
 	"github.com/christian-doucette/time-to-go/internal/mta"
@@ -11,6 +13,7 @@ import (
 
 var (
 	mtaApiKey, stopId string
+	debug             bool
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -28,7 +31,13 @@ to quickly create a Cobra application.`,
 
 		gtfsRaw := mta.CallRealtimeFeedApi(mtaApiKey, line)
 		arrivalTimes := gtfs.ExtractStopArrivalTimes(gtfsRaw, stopId, 5)
-		oled.DisplayTextLines(arrivalTimes, 13, 12)
+
+		if debug {
+			fmt.Println(strings.Join(arrivalTimes, "\n"))
+
+		} else {
+			oled.DisplayTextLines(arrivalTimes, 13, 12)
+		}
 
 	},
 }
@@ -41,6 +50,8 @@ func Execute() {
 
 	rootCmd.Flags().StringVar(&stopId, "stop-id", "", "Stop ID for the station")
 	rootCmd.MarkFlagRequired("stop-id")
+
+	rootCmd.Flags().BoolVarP(&debug, "debug", "d", false, "Print output to terminal instead of OLED display")
 
 	err := rootCmd.Execute()
 	if err != nil {
