@@ -4,17 +4,21 @@ import (
 	"image"
 	"log"
 
-	"golang.org/x/image/font/basicfont"
 	"golang.org/x/image/font"
+	"golang.org/x/image/font/basicfont"
 	"golang.org/x/image/math/fixed"
-    "periph.io/x/conn/v3/i2c/i2creg"
-    "periph.io/x/devices/v3/ssd1306"
-    "periph.io/x/devices/v3/ssd1306/image1bit"
-    "periph.io/x/host/v3"
+	"periph.io/x/conn/v3/i2c/i2creg"
+	"periph.io/x/devices/v3/ssd1306"
+	"periph.io/x/devices/v3/ssd1306/image1bit"
+	"periph.io/x/host/v3"
 )
 
+// clears the OLED display of input
+func ClearDisplay() {
+	DisplayTextLines([]string{}, 0, 0)
+}
 
-
+// prints the lines to the OLED display
 func DisplayTextLines(lines []string, startingDepth int, recurringDepth int) {
 	// Make sure periph is initialized.
 	if _, err := host.Init(); err != nil {
@@ -38,17 +42,17 @@ func DisplayTextLines(lines []string, startingDepth int, recurringDepth int) {
 
 	f := basicfont.Face7x13
 	drawer := font.Drawer{
-	 	Dst:  img,
-	 	Src:  &image.Uniform{image1bit.On},
-	 	Face: f,
-	 	Dot:  fixed.P(0, startingDepth),
+		Dst:  img,
+		Src:  &image.Uniform{image1bit.On},
+		Face: f,
+		Dot:  fixed.P(0, startingDepth),
 	}
 
 	// Draw each line
 	for i, line := range lines {
-		drawer.Dot = fixed.P(0, startingDepth + i*recurringDepth)
+		drawer.Dot = fixed.P(0, startingDepth+i*recurringDepth)
 		drawer.DrawString(line)
-		
+
 	}
 
 	if err := dev.Draw(dev.Bounds(), img, image.Point{}); err != nil {
