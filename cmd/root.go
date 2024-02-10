@@ -1,9 +1,16 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/christian-doucette/time-to-go/internal/gtfs"
+	"github.com/christian-doucette/time-to-go/internal/mta"
 	"github.com/spf13/cobra"
+)
+
+var (
+	mtaApiKey, stopId string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -16,14 +23,23 @@ examples and usage of using your application. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		line := stopId[0]
+
+		gtfsRaw := mta.CallRealtimeFeedApi(mtaApiKey, line)
+		fmt.Println(gtfs.ExtractStopArrivalTimes(gtfsRaw, stopId, 5))
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
+	rootCmd.Flags().StringVar(&mtaApiKey, "mta-api-key", "", "API key used for calls to the MTA API")
+	rootCmd.MarkFlagRequired("mta-api-key")
+
+	rootCmd.Flags().StringVar(&stopId, "stop-id", "", "Stop ID for the station")
+	rootCmd.MarkFlagRequired("stop-id")
+
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
