@@ -56,7 +56,7 @@ func getStopDirection(stopId string) string {
 }
 
 func formattedTitle(stopId string) string {
-	return fmt.Sprintf("%s %s", getStopName(stopId), getStopDirection(stopId))
+	return fmt.Sprintf("%s %s", getStopDirection(stopId), getStopName(stopId))
 }
 
 func formattedMinutesFromNow(currentTime int64, futureTime int64) string {
