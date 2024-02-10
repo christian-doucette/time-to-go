@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/christian-doucette/time-to-go/internal/gtfs"
 	"github.com/christian-doucette/time-to-go/internal/mta"
+	"github.com/christian-doucette/time-to-go/internal/oled"
 	"github.com/spf13/cobra"
 )
 
@@ -27,7 +27,9 @@ to quickly create a Cobra application.`,
 		line := stopId[0]
 
 		gtfsRaw := mta.CallRealtimeFeedApi(mtaApiKey, line)
-		fmt.Println(gtfs.ExtractStopArrivalTimes(gtfsRaw, stopId, 5))
+		arrivalTimes := gtfs.ExtractStopArrivalTimes(gtfsRaw, stopId, 5)
+		oled.DisplayTextLines(arrivalTimes, 13, 12)
+
 	},
 }
 

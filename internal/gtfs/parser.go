@@ -51,6 +51,6 @@ func parse(stopId string, gtfsRaw []byte) stopArrivalSnapshot {
 	return stopArrivalSnapshot{stopId: stopId, arrivalEvents: arrivalEvents}
 }
 
-func ExtractStopArrivalTimes(gtfsRaw []byte, stopId string, numLines int) string {
-	return parse(stopId, gtfsRaw).toString(numLines)
+func ExtractStopArrivalTimes(gtfsRaw []byte, stopId string, numLines int) []string {
+	return parse(stopId, gtfsRaw).toFormattedList(numLines)
 }

@@ -6,7 +6,6 @@ import (
 	"io"
 	"math"
 	"os"
-	"strings"
 	"time"
 )
 
@@ -81,7 +80,7 @@ func (ae arrivalEvent) toString(currentTime int64) string {
 	return fmt.Sprintf("%s | (%s) %s", formattedMinutesFromNow(currentTime, ae.expectedTime), ae.routeId, getStopName(ae.destinationStopId))
 }
 
-func (sas stopArrivalSnapshot) toString(numLines int) string {
+func (sas stopArrivalSnapshot) toFormattedList(numLines int) []string {
 	currentTime := time.Now().Unix()
 	formattedList := []string{formattedTitle(sas.stopId)}
 
@@ -95,5 +94,5 @@ func (sas stopArrivalSnapshot) toString(numLines int) string {
 		}
 	}
 
-	return strings.Join(formattedList, "\n")
+	return formattedList
 }
