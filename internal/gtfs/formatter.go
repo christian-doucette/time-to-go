@@ -7,6 +7,7 @@ import (
 	"math"
 	"os"
 	"time"
+	"path/filepath"
 )
 
 func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFieldIndex int) string {
@@ -38,7 +39,14 @@ func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFi
 }
 
 func getStopName(stopId string) string {
-	return scanCsv("internal/gtfs/stops.txt", 0, stopId, 1)
+	executablePath, err := os.Executable()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	executableDirectory := filepath.Dir(executablePath)
+
+	return scanCsv(executableDirectory + "/internal/gtfs/stops.txt", 0, stopId, 1)
 }
 
 func getStopDirection(stopId string) string {
