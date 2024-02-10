@@ -24,12 +24,16 @@ func mtaUrl(line byte) string {
 	case 'S':
 		return "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-si"
 	default:
-		panic("Invalid Stop ID")
+		panic("Invalid StopID (first letter must be one of 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'J', 'L', 'M', 'N', 'Q', 'R', 'S', 'W', 'Z', '1', '2', '3', '4', '5', '6', '7')")
 	}
 }
 
 func authorizationHeader(mtaApiKey string) (string, string) {
 	return "x-api-key", mtaApiKey
+}
+
+func ok(status int) bool {
+	return 200 <= status && status < 300
 }
 
 func CallRealtimeFeedApi(mtaApiKey string, line byte) []byte {
@@ -46,6 +50,10 @@ func CallRealtimeFeedApi(mtaApiKey string, line byte) []byte {
 	responseData, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		panic(err.Error())
+	}
+
+	if !ok(resp.StatusCode) {
+		panic("MTA API call failed: " + resp.Status + " " + string(responseData))
 	}
 
 	return responseData

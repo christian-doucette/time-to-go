@@ -1,7 +1,6 @@
 package gtfs
 
 import (
-	"log"
 	"sort"
 
 	"github.com/MobilityData/gtfs-realtime-bindings/golang/gtfs"
@@ -23,7 +22,7 @@ func parse(stopId string, gtfsRaw []byte) stopArrivalSnapshot {
 	feed := gtfs.FeedMessage{}
 	err := proto.Unmarshal(gtfsRaw, &feed)
 	if err != nil {
-		log.Fatal(err)
+		panic(err.Error())
 	}
 
 	var arrivalEvents []arrivalEvent

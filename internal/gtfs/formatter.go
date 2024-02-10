@@ -51,7 +51,7 @@ func getStopDirection(stopId string) string {
 	case 'S':
 		return "Downtown"
 	default:
-		return "Unknown Stop Direction"
+		panic("Invalid StopID (must end with 'N' or 'S')")
 
 	}
 }
