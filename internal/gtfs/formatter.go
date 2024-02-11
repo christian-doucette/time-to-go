@@ -6,8 +6,8 @@ import (
 	"io"
 	"math"
 	"os"
-	"time"
 	"path/filepath"
+	"time"
 )
 
 func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFieldIndex int) string {
@@ -20,6 +20,9 @@ func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFi
 	csvReader := csv.NewReader(f)
 
 	header, err := csvReader.Read()
+	if err != nil {
+		panic(err.Error())
+	}
 
 	for {
 		record, err := csvReader.Read()
@@ -27,7 +30,7 @@ func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFi
 			break
 		}
 		if err != nil {
-			panic(err)
+			panic(err.Error())
 		}
 
 		if record[targetFieldIndex] == targetValue {
@@ -46,7 +49,7 @@ func getStopName(stopId string) string {
 
 	executableDirectory := filepath.Dir(executablePath)
 
-	return scanCsv(executableDirectory + "/internal/gtfs/stops.txt", 0, stopId, 1)
+	return scanCsv(executableDirectory+"/internal/gtfs/stops.txt", 0, stopId, 1)
 }
 
 func getStopDirection(stopId string) string {

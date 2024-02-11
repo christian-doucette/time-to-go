@@ -2,7 +2,6 @@ package oled
 
 import (
 	"image"
-	"log"
 
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/basicfont"
@@ -56,6 +55,6 @@ func DisplayTextLines(lines []string, startingDepth int, recurringDepth int) {
 	}
 
 	if err := dev.Draw(dev.Bounds(), img, image.Point{}); err != nil {
-		log.Fatal(err)
+		panic(err.Error())
 	}
 }

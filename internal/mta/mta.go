@@ -1,7 +1,7 @@
 package mta
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -40,14 +40,17 @@ func CallRealtimeFeedApi(mtaApiKey string, line byte) []byte {
 	client := &http.Client{}
 
 	req, err := http.NewRequest("GET", mtaUrl(line), nil)
-	req.Header.Set(authorizationHeader(mtaApiKey))
-	resp, err := client.Do(req)
-
 	if err != nil {
 		panic(err.Error())
 	}
 
-	responseData, err := ioutil.ReadAll(resp.Body)
+	req.Header.Set(authorizationHeader(mtaApiKey))
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	responseData, err := io.ReadAll(resp.Body)
 	if err != nil {
 		panic(err.Error())
 	}

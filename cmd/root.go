@@ -46,14 +46,20 @@ to quickly create a Cobra application.`,
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	rootCmd.Flags().StringVar(&mtaApiKey, "mta-api-key", "", "API key used for calls to the MTA API")
-	rootCmd.MarkFlagRequired("mta-api-key")
+	err := rootCmd.MarkFlagRequired("mta-api-key")
+	if err != nil {
+		os.Exit(1)
+	}
 
 	rootCmd.Flags().StringVar(&stopId, "stop-id", "", "Stop ID for the station")
-	rootCmd.MarkFlagRequired("stop-id")
+	err = rootCmd.MarkFlagRequired("stop-id")
+	if err != nil {
+		os.Exit(1)
+	}
 
 	rootCmd.Flags().BoolVarP(&debug, "debug", "d", false, "Print output to terminal instead of OLED display")
 
-	err := rootCmd.Execute()
+	err = rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
