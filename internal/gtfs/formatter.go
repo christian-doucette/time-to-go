@@ -1,17 +1,19 @@
 package gtfs
 
 import (
+	"embed"
 	"encoding/csv"
 	"fmt"
 	"io"
 	"math"
-	"os"
-	"path/filepath"
 	"time"
 )
 
+//go:embed stops.txt
+var folder embed.FS
+
 func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFieldIndex int) string {
-	f, err := os.Open(filePath)
+	f, err := folder.Open(filePath)
 	if err != nil {
 		panic("Unable to read input file " + filePath + ", error: " + err.Error())
 	}
@@ -42,14 +44,7 @@ func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFi
 }
 
 func getStopName(stopId string) string {
-	executablePath, err := os.Executable()
-	if err != nil {
-		panic(err.Error())
-	}
-
-	executableDirectory := filepath.Dir(executablePath)
-
-	return scanCsv(executableDirectory+"/internal/gtfs/stops.txt", 0, stopId, 1)
+	return scanCsv("stops.txt", 0, stopId, 1)
 }
 
 func getStopDirection(stopId string) string {
