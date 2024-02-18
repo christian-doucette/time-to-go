@@ -13,19 +13,19 @@ import (
 )
 
 // clears the OLED display of input
-func ClearDisplay() {
-	DisplayTextLines([]string{}, 0, 0)
+func ClearDisplay(bus string) {
+	DisplayTextLines([]string{}, 0, 0, bus)
 }
 
 // prints the lines to the OLED display
-func DisplayTextLines(lines []string, startingDepth int, recurringDepth int) {
+func DisplayTextLines(lines []string, startingDepth int, recurringDepth int, bus string) {
 	// Make sure periph is initialized.
 	if _, err := host.Init(); err != nil {
 		panic(err.Error())
 	}
 
 	// Use i2creg I²C bus registry to find the first available I²C bus.
-	b, err := i2creg.Open("")
+	b, err := i2creg.Open(bus)
 	if err != nil {
 		panic(err.Error())
 	}

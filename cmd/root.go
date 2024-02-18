@@ -27,6 +27,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		bus, _ := cmd.Flags().GetInt("bus")
 		line := stopId[0]
 
 		gtfsRaw := mta.CallRealtimeFeedApi(mtaApiKey, line)
@@ -36,7 +37,7 @@ to quickly create a Cobra application.`,
 			fmt.Println(strings.Join(arrivalTimes, "\n"))
 
 		} else {
-			oled.DisplayTextLines(arrivalTimes, 13, 12)
+			oled.DisplayTextLines(arrivalTimes, 13, 12, fmt.Sprint(bus))
 		}
 
 	},
@@ -56,6 +57,8 @@ func Execute() {
 	if err != nil {
 		os.Exit(1)
 	}
+
+	rootCmd.PersistentFlags().Int("bus", 1, "Bus for the I2C connection")
 
 	rootCmd.Flags().BoolVarP(&debug, "debug", "d", false, "Print output to terminal instead of OLED display")
 

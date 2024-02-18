@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/christian-doucette/time-to-go/internal/oled"
 	"github.com/spf13/cobra"
 )
@@ -16,7 +18,8 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		oled.ClearDisplay()
+		bus, _ := cmd.Flags().GetInt("bus")
+		oled.ClearDisplay(fmt.Sprint(bus))
 	},
 }
 
