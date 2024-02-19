@@ -28,9 +28,8 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		bus, _ := cmd.Flags().GetInt("bus")
-		line := stopId[0]
 
-		gtfsRaw := mta.CallRealtimeFeedApi(mtaApiKey, line)
+		gtfsRaw := mta.CallAllRealtimeFeedApis(mtaApiKey)
 		arrivalTimes := gtfs.ExtractStopArrivalTimes(gtfsRaw, stopId, 5)
 
 		if debug {
