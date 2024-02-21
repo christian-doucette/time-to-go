@@ -18,24 +18,26 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "main",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "./time-to-go --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--bus YOUR_I2C_BUS] [--debug]",
+	Short: "Display next subway times on OLED monitor via I2C",
+	Long: `This command will pull the next subway arrival times for a specific stop from the MTA API. 	
+If the debug option is included, it will print the arrival times to the terminal output.
+If the debug option is not included, it will display the arrival times on an OLED display connected over I2C.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		bus, _ := cmd.Flags().GetInt("bus")
 
+		// gets the subway arrival data right now
 		gtfsRaw := mta.CallAllRealtimeFeedApis(mtaApiKey)
+
+		// parses out the next 5 arrival times for this stop
 		arrivalTimes := gtfs.ExtractStopArrivalTimes(gtfsRaw, stopId, 5)
 
 		if debug {
+			// if debug option selected, prints arrival times to stdout
 			fmt.Println(strings.Join(arrivalTimes, "\n"))
 
 		} else {
+			// otherwise displays arrival times to OLED display
 			oled.DisplayTextLines(arrivalTimes, 13, 12, fmt.Sprint(bus))
 		}
 

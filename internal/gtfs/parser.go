@@ -18,6 +18,7 @@ type stopArrivalSnapshot struct {
 	arrivalEvents []arrivalEvent
 }
 
+// parses raw GTFS file to extract arrival times for a specific stop
 func parse(stopId string, gtfsRaw []byte) stopArrivalSnapshot {
 	feed := gtfs.FeedMessage{}
 	err := proto.Unmarshal(gtfsRaw, &feed)
@@ -51,6 +52,7 @@ func parse(stopId string, gtfsRaw []byte) stopArrivalSnapshot {
 	return stopArrivalSnapshot{stopId: stopId, arrivalEvents: arrivalEvents}
 }
 
+// extracts the next numLines arrival times for stopId from raw GTFS file
 func ExtractStopArrivalTimes(gtfsRaw []byte, stopId string, numLines int) []string {
 	return parse(stopId, gtfsRaw).toFormattedList(numLines)
 }

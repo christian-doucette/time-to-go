@@ -12,6 +12,7 @@ import (
 //go:embed stops.txt
 var folder embed.FS
 
+// reads through a CSV looking for a target value in at a specific column
 func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFieldIndex int) string {
 	f, err := folder.Open(filePath)
 	if err != nil {
@@ -43,10 +44,12 @@ func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFi
 	panic("Unable to find " + header[targetFieldIndex] + " " + targetValue + " in " + filePath)
 }
 
+// extracts the stop name from stops.txt file
 func getStopName(stopId string) string {
 	return scanCsv("stops.txt", 0, stopId, 1)
 }
 
+// gets stop direction name
 func getStopDirection(stopId string) string {
 	direction := stopId[len(stopId)-1]
 
@@ -61,10 +64,12 @@ func getStopDirection(stopId string) string {
 	}
 }
 
+// formats title by combining stop direction and stop name into string
 func formattedTitle(stopId string) string {
 	return fmt.Sprintf("%s %s", getStopDirection(stopId), getStopName(stopId))
 }
 
+// formats time difference between two unix timestamps as string
 func formattedMinutesFromNow(currentTime int64, futureTime int64) string {
 
 	minutesFromNow := float64(futureTime-currentTime) / 60.0
@@ -82,10 +87,13 @@ func formattedMinutesFromNow(currentTime int64, futureTime int64) string {
 	}
 }
 
+// formats an arrivalEvent struct as a string
 func (ae arrivalEvent) toString(currentTime int64) string {
 	return fmt.Sprintf("%s | (%s) %s", formattedMinutesFromNow(currentTime, ae.expectedTime), ae.routeId, getStopName(ae.destinationStopId))
 }
 
+// formats a stopArrivalSnapshot as a list of strings
+// numLines argument defines how many arrival times are included
 func (sas stopArrivalSnapshot) toFormattedList(numLines int) []string {
 	currentTime := time.Now().Unix()
 	formattedList := []string{formattedTitle(sas.stopId)}

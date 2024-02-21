@@ -5,37 +5,17 @@ import (
 	"net/http"
 )
 
-func mtaUrl(line byte) string {
-	switch line {
-	case 'A', 'C', 'E':
-		return "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace"
-	case 'B', 'D', 'F', 'M':
-		return "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm"
-	case 'G':
-		return "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-g"
-	case 'J', 'Z':
-		return "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-jz"
-	case 'N', 'Q', 'R', 'W':
-		return "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-nqrw"
-	case 'L':
-		return "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-l"
-	case '1', '2', '3', '4', '5', '6', '7':
-		return "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"
-	case 'S':
-		return "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-si"
-	default:
-		panic("Invalid StopID (first letter must be one of 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'J', 'L', 'M', 'N', 'Q', 'R', 'S', 'W', 'Z', '1', '2', '3', '4', '5', '6', '7')")
-	}
-}
-
+// formats authorization header for MTA API request
 func authorizationHeader(mtaApiKey string) (string, string) {
 	return "x-api-key", mtaApiKey
 }
 
+// checks if status code from response is OK
 func ok(status int) bool {
 	return 200 <= status && status < 300
 }
 
+// calls a specific MTA api endpoint
 func callMtaUrl(mtaApiKey string, url string) []byte {
 	client := &http.Client{}
 
@@ -62,6 +42,7 @@ func callMtaUrl(mtaApiKey string, url string) []byte {
 	return responseData
 }
 
+// calls all MTA API realtime feed endpoints and joins the results together
 func CallAllRealtimeFeedApis(mtaApiKey string) []byte {
 	realtimeFeedUrls := [8]string{
 		"https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace",
