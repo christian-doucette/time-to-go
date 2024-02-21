@@ -30,7 +30,7 @@ If the debug option is not included, it will display the arrival times on an OLE
 		gtfsRaw := mta.CallAllRealtimeFeedApis(mtaApiKey)
 
 		// parses out the next 5 arrival times for this stop
-		arrivalTimes := gtfs.ExtractStopArrivalTimes(gtfsRaw, stopId, 5)
+		arrivalTimes := gtfs.ExtractStopArrivalTimes(gtfsRaw, stopId, 4)
 
 		if debug {
 			// if debug option selected, prints arrival times to stdout
