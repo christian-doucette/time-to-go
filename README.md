@@ -17,7 +17,7 @@ Clear OLED display:
 ./time-to-go clear [--bus YOUR_I2C_BUS]
 ```
 
-![IMG_2368](https://github.com/christian-doucette/time-to-go/assets/64502867/a613ea96-b894-4464-9983-596ef68960d5)
+![IMG_2382 (1)](https://github.com/christian-doucette/time-to-go/assets/64502867/cd741130-a423-456a-b77c-278f551a23d2)
 
 ## Installing
 1. Install Go on your Raspberry Pi, if you don't have it already
