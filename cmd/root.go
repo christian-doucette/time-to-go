@@ -27,7 +27,7 @@ If the debug option is not included, it will display the arrival times on an OLE
 		bus, _ := cmd.Flags().GetInt("bus")
 
 		// gets the subway arrival data right now
-		gtfsRaw := mta.CallAllRealtimeFeedApis(mtaApiKey)
+		gtfsRaw := mta.CallAllSubwayRealtimeFeedApis(mtaApiKey)
 
 		// parses out the next 5 arrival times for this stop
 		arrivalTimes := gtfs.ExtractStopArrivalTimes(gtfsRaw, stopId, 4)
