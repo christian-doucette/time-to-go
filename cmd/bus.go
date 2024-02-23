@@ -44,13 +44,13 @@ If the debug option is not included, it will display the arrival times on an OLE
 func init() {
 	rootCmd.AddCommand(busCmd)
 
-	busCmd.Flags().String("mta-api-key", "", "API key used for calls to the MTA API")
+	busCmd.Flags().String("mta-api-key", "", "API key used for calls to the MTA bus API")
 	err := busCmd.MarkFlagRequired("mta-api-key")
 	if err != nil {
 		os.Exit(1)
 	}
 
-	busCmd.Flags().String("stop-id", "", "Stop ID for the station")
+	busCmd.Flags().String("stop-id", "", "Stop ID for the bus stop")
 	err = busCmd.MarkFlagRequired("stop-id")
 	if err != nil {
 		os.Exit(1)
