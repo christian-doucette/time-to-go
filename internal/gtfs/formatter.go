@@ -7,6 +7,9 @@ import (
 	"io"
 	"math"
 	"time"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 //go:embed stop-data/*.txt
@@ -59,7 +62,8 @@ func getStopName(stopId string) string {
 	for _, stopDataFilepath := range stopDataFilepaths {
 		stopName, err := scanCsv(stopDataFilepath, 0, stopId, 1)
 		if err == nil {
-			return stopName
+			caser := cases.Title(language.English)
+			return caser.String(stopName)
 		}
 	}
 
