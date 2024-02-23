@@ -53,6 +53,11 @@ func parse(stopId string, gtfsRaw []byte) stopArrivalSnapshot {
 }
 
 // extracts the next numLines arrival times for stopId from raw GTFS file
-func ExtractStopArrivalTimes(gtfsRaw []byte, stopId string, numLines int) []string {
-	return parse(stopId, gtfsRaw).toFormattedList(numLines)
+func ExtractSubwayStopArrivalTimes(gtfsRaw []byte, stopId string, numLines int) []string {
+	return parse(stopId, gtfsRaw).subwayFormattedList(numLines)
+}
+
+// extracts the next numLines arrival times for stopId from raw GTFS file
+func ExtractBusStopArrivalTimes(gtfsRaw []byte, stopId string, numLines int) []string {
+	return parse(stopId, gtfsRaw).busFormattedList(numLines)
 }

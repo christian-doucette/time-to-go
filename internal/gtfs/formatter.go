@@ -9,11 +9,11 @@ import (
 	"time"
 )
 
-//go:embed stops.txt
+//go:embed stop-data/*.txt
 var folder embed.FS
 
 // reads through a CSV looking for a target value in at a specific column
-func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFieldIndex int) string {
+func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFieldIndex int) (string, error) {
 	f, err := folder.Open(filePath)
 	if err != nil {
 		panic("Unable to read input file " + filePath + ", error: " + err.Error())
@@ -37,36 +37,33 @@ func scanCsv(filePath string, targetFieldIndex int, targetValue string, returnFi
 		}
 
 		if record[targetFieldIndex] == targetValue {
-			return record[returnFieldIndex]
+			return record[returnFieldIndex], nil
 		}
 	}
 
-	panic("Unable to find " + header[targetFieldIndex] + " " + targetValue + " in " + filePath)
+	return "", fmt.Errorf("Unable to find " + header[targetFieldIndex] + " " + targetValue + " in " + filePath)
 }
 
 // extracts the stop name from stops.txt file
 func getStopName(stopId string) string {
-	return scanCsv("stops.txt", 0, stopId, 1)
-}
-
-// gets stop direction name
-func getStopDirection(stopId string) string {
-	direction := stopId[len(stopId)-1]
-
-	switch direction {
-	case 'N':
-		return "Uptown"
-	case 'S':
-		return "Downtown"
-	default:
-		panic("Invalid StopID (must end with 'N' or 'S')")
-
+	stopDataFilepaths := [7]string{
+		"stop-data/bus-bronx.txt",
+		"stop-data/bus-brooklyn.txt",
+		"stop-data/bus-manhattan.txt",
+		"stop-data/bus-mta-company.txt",
+		"stop-data/bus-queens.txt",
+		"stop-data/bus-staten-island.txt",
+		"stop-data/subway.txt",
 	}
-}
 
-// formats title by combining stop direction and stop name into string
-func formattedTitle(stopId string) string {
-	return fmt.Sprintf("%s %s", getStopDirection(stopId), getStopName(stopId))
+	for _, stopDataFilepath := range stopDataFilepaths {
+		stopName, err := scanCsv(stopDataFilepath, 0, stopId, 1)
+		if err == nil {
+			return stopName
+		}
+	}
+
+	panic("Could not find stopId " + stopId + " in any of the included files")
 }
 
 // formats time difference between two unix timestamps as string
@@ -94,19 +91,52 @@ func (ae arrivalEvent) toString(currentTime int64) string {
 
 // formats a stopArrivalSnapshot as a list of strings
 // numLines argument defines how many arrival times are included
-func (sas stopArrivalSnapshot) toFormattedList(numLines int) []string {
+func (sas stopArrivalSnapshot) toFormattedArrivalsList(numLines int) []string {
 	currentTime := time.Now().Unix()
-	formattedList := []string{formattedTitle(sas.stopId)}
+	formattedList := []string{}
 
 	for _, arrivalEvent := range sas.arrivalEvents {
 		if currentTime < arrivalEvent.expectedTime {
 			formattedList = append(formattedList, arrivalEvent.toString(currentTime))
 		}
 
-		if len(formattedList) > numLines {
+		if len(formattedList) >= numLines {
 			break
 		}
 	}
 
 	return formattedList
+}
+
+// gets stop direction name
+func getSubwayStopDirection(stopId string) string {
+	direction := stopId[len(stopId)-1]
+
+	switch direction {
+	case 'N':
+		return "Uptown"
+	case 'S':
+		return "Downtown"
+	default:
+		panic("Invalid StopID (must end with 'N' or 'S')")
+
+	}
+}
+
+// formats subway title by combining stop direction and stop name into string
+func subwayFormattedTitle(stopId string) string {
+	return fmt.Sprintf("%s %s", getSubwayStopDirection(stopId), getStopName(stopId))
+}
+
+// formats bus title by using stop ID
+func busFormattedTitle(stopId string) string {
+	return getStopName(stopId)
+}
+
+func (sas stopArrivalSnapshot) busFormattedList(numLines int) []string {
+	return append([]string{busFormattedTitle(sas.stopId)}, sas.toFormattedArrivalsList(numLines)...)
+}
+
+func (sas stopArrivalSnapshot) subwayFormattedList(numLines int) []string {
+	return append([]string{subwayFormattedTitle(sas.stopId)}, sas.toFormattedArrivalsList(numLines)...)
 }
