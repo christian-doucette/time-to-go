@@ -4,17 +4,27 @@ Command line tool to display upcoming NYC subway times on a Raspberry Pi OLED mo
 ## Command Usage
 Print next subway times to OLED display:
 ```
-./time-to-go --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--bus YOUR_I2C_BUS]
+./time-to-go subway --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--i2c-bus YOUR_I2C_BUS]
 ```
 
 Print next subway times to terminal:
 ```
-./time-to-go --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--bus YOUR_I2C_BUS]
+./time-to-go subway --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID
+```
+
+Print next bus times to OLED display:
+```
+./time-to-go bus --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--i2c-bus YOUR_I2C_BUS]
+```
+
+Print next bus times to terminal:
+```
+./time-to-go bus --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID
 ```
 
 Clear OLED display:
 ```
-./time-to-go clear [--bus YOUR_I2C_BUS]
+./time-to-go clear [--i2c-bus YOUR_I2C_BUS]
 ```
 
 ![IMG_2382 (1)](https://github.com/christian-doucette/time-to-go/assets/64502867/cd741130-a423-456a-b77c-278f551a23d2)
@@ -38,14 +48,15 @@ This should create an executable ```time-to-go``` file
 
 4. Request an API key from the MTA
 
-Sign up for one [here](https://api.mta.info/#/signup).
+Sign up for a subway API key [here](https://api.mta.info/#/signup).
+Sign up for a bus API key [here](https://bustime.mta.info/wiki/Developers/Index).
 
 5. Test run (print to output)
 
-At this point, try running the following command, using your MTA api key:
+At this point, try running the following command, using your MTA subway API key:
 
 ```
-./time-to-go --debug --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N
+./time-to-go subway --debug --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N
 ```
 This will print the next subway times at stop R16N (Times Square–42nd Street NQRW) to output. If something goes wrong, resolve it before continuing.
 
@@ -61,7 +72,7 @@ I used a 0.96 inch display with an SSD1306 driver connecting over I2C. Follow th
 
 At this point, try running the following command:
 ```
-./time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N
+./time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N
 ```
 
 This should display the next subway times at stop R16N to your OLED display. If something goes wrong, resolve it before continuing.
@@ -82,20 +93,21 @@ crontab -e
 
 Add the following lines:
 ```
-* * * * *            ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N
-* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N)
+* * * * *            ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N
+* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N)
 ```
 Cronjobs can be run at most once per minute, so to run it every thirty seconds there are two Cronjobs kicked off on the minute, one which waits 30 seconds before execution.
-- Replace the mta-api-key argument with your key
-- Replace the stop-id argument with the ID of the stop you want to display (find a stop ID by name [here](https://github.com/christian-doucette/time-to-go/blob/main/internal/gtfs/stops.txt)).
+- Switch ```subway``` for ```bus``` if you want to pull bus times instead of subway 
+- Replace the mta-api-key argument with your key (subway or bus as appropriate)
+- Replace the stop-id argument with the ID of the stop you want to display (find a stop ID by name [here](https://github.com/christian-doucette/time-to-go/blob/main/internal/gtfs/stops-data)).
 - Replace ``` ~/Desktop/time-to-go/time-to-go``` with the full path to the executable
 
 If you are using multiple I2C devices on different buses, specify the buses (1 will be used as the default):
 ```
-* * * * *            ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N --bus 1
-* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N --bus 1)
-* * * * *            ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16S --bus 3
-* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16S --bus 3)
+* * * * *            ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N --i2c-bus 1
+* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N --i2c-bus 1)
+* * * * *            ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16S --i2c-bus 3
+* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16S --i2c-bus 3)
 
 ```
 
