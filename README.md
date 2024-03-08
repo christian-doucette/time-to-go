@@ -9,7 +9,7 @@ Print next subway times to OLED display:
 
 Print next subway times to terminal:
 ```
-./time-to-go subway --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--i2c-bus YOUR_I2C_BUS]
+./time-to-go subway --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID
 ```
 
 Print next bus times to OLED display:
@@ -19,7 +19,7 @@ Print next bus times to OLED display:
 
 Print next bus times to terminal:
 ```
-./time-to-go bus --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--i2c-bus YOUR_I2C_BUS]
+./time-to-go bus --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID
 ```
 
 Clear OLED display:
@@ -104,10 +104,10 @@ Cronjobs can be run at most once per minute, so to run it every thirty seconds t
 
 If you are using multiple I2C devices on different buses, specify the buses (1 will be used as the default):
 ```
-* * * * *            ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N --i2c-bus 1
-* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N --i2c-bus 1)
-* * * * *            ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16S --i2c-bus 3
-* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16S --i2c-bus 3)
+* * * * *            ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N --i2c-bus 1
+* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16N --i2c-bus 1)
+* * * * *            ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16S --i2c-bus 3
+* * * * * (sleep 30; ~/Desktop/time-to-go/time-to-go subway --mta-api-key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --stop-id R16S --i2c-bus 3)
 
 ```
 
