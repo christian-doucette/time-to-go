@@ -13,7 +13,7 @@ import (
 
 // subwayCmd represents the subway command
 var subwayCmd = &cobra.Command{
-	Use:   "subway --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--bus YOUR_I2C_BUS] [--debug]",
+	Use:   "subway --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--bus YOUR_I2C_BUS] [--debug] [--least-minutes-ahead LEAST_MINUTES_AHEAD`]",
 	Short: "Display next subway times on OLED monitor via I2C",
 	Long: `This command will pull the next subway arrival times for a specific stop from the MTA API. 	
 If the debug option is included, it will print the arrival times to the terminal output.
@@ -23,12 +23,13 @@ If the debug option is not included, it will display the arrival times on an OLE
 		stopId, _ := cmd.Flags().GetString("stop-id")
 		mtaApiKey, _ := cmd.Flags().GetString("mta-api-key")
 		debug, _ := cmd.Flags().GetBool("debug")
+		leastMinutesAhead, _ := cmd.Flags().GetInt64("least-minutes-ahead")
 
 		// gets the subway arrival data right now
 		gtfsRaw := mta.CallAllSubwayRealtimeFeedApis(mtaApiKey)
 
 		// parses out the next 4 arrival times for this stop
-		arrivalTimes := gtfs.ExtractSubwayStopArrivalTimes(gtfsRaw, stopId, 4)
+		arrivalTimes := gtfs.ExtractSubwayStopArrivalTimes(gtfsRaw, stopId, 4, leastMinutesAhead)
 
 		if debug {
 			// if debug option selected, prints arrival times to stdout
@@ -58,4 +59,5 @@ func init() {
 
 	subwayCmd.Flags().Int("i2c-bus", 1, "Bus for the I2C connection")
 	subwayCmd.Flags().Bool("debug", false, "Print output to terminal instead of OLED display")
+	subwayCmd.Flags().Int64("least-minutes-ahead", 0, "Minimum number of minutes into the future you want to see subways for")
 }
