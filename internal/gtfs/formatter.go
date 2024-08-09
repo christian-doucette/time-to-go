@@ -95,12 +95,12 @@ func (ae arrivalEvent) toString(currentTime int64) string {
 
 // formats a stopArrivalSnapshot as a list of strings
 // numLines argument defines how many arrival times are included
-func (sas stopArrivalSnapshot) toFormattedArrivalsList(numLines int) []string {
+func (sas stopArrivalSnapshot) toFormattedArrivalsList(numLines int, leastMinutesAhead int64) []string {
 	currentTime := time.Now().Unix()
 	formattedList := []string{}
 
 	for _, arrivalEvent := range sas.arrivalEvents {
-		if currentTime < arrivalEvent.expectedTime {
+		if currentTime+(leastMinutesAhead*60) < arrivalEvent.expectedTime {
 			formattedList = append(formattedList, arrivalEvent.toString(currentTime))
 		}
 
@@ -137,10 +137,10 @@ func busFormattedTitle(stopId string) string {
 	return getStopName(stopId)
 }
 
-func (sas stopArrivalSnapshot) busFormattedList(numLines int) []string {
-	return append([]string{busFormattedTitle(sas.stopId)}, sas.toFormattedArrivalsList(numLines)...)
+func (sas stopArrivalSnapshot) busFormattedList(numLines int, leastMinutesAhead int64) []string {
+	return append([]string{busFormattedTitle(sas.stopId)}, sas.toFormattedArrivalsList(numLines, leastMinutesAhead)...)
 }
 
-func (sas stopArrivalSnapshot) subwayFormattedList(numLines int) []string {
-	return append([]string{subwayFormattedTitle(sas.stopId)}, sas.toFormattedArrivalsList(numLines)...)
+func (sas stopArrivalSnapshot) subwayFormattedList(numLines int, leastMinutesAhead int64) []string {
+	return append([]string{subwayFormattedTitle(sas.stopId)}, sas.toFormattedArrivalsList(numLines, leastMinutesAhead)...)
 }
