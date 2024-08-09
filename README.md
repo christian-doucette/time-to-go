@@ -4,22 +4,22 @@ Command line tool to display upcoming NYC subway times on a Raspberry Pi OLED mo
 ## Command Usage
 Print next subway times to OLED display:
 ```
-./time-to-go subway --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--i2c-bus YOUR_I2C_BUS]
+./time-to-go subway --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--i2c-bus YOUR_I2C_BUS] [--least-minutes-ahead LEAST_MINUTES_AHEAD]
 ```
 
 Print next subway times to terminal:
 ```
-./time-to-go subway --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID
+./time-to-go subway --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--least-minutes-ahead LEAST_MINUTES_AHEAD]
 ```
 
 Print next bus times to OLED display:
 ```
-./time-to-go bus --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--i2c-bus YOUR_I2C_BUS]
+./time-to-go bus --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--i2c-bus YOUR_I2C_BUS] [--least-minutes-ahead LEAST_MINUTES_AHEAD]
 ```
 
 Print next bus times to terminal:
 ```
-./time-to-go bus --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID
+./time-to-go bus --debug --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--least-minutes-ahead LEAST_MINUTES_AHEAD]
 ```
 
 Clear OLED display:

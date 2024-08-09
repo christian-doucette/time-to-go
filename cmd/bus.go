@@ -13,7 +13,7 @@ import (
 
 // busCmd represents the bus command
 var busCmd = &cobra.Command{
-	Use:   "bus --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--bus YOUR_I2C_BUS] [--debug] [--least-minutes-ahead LEAST_MINUTES_AHEAD`]",
+	Use:   "bus --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--bus YOUR_I2C_BUS] [--debug] [--least-minutes-ahead LEAST_MINUTES_AHEAD]",
 	Short: "Display next bus times on OLED monitor via I2C",
 	Long: `This command will pull the next bus arrival times for a specific stop from the MTA API. 	
 If the debug option is included, it will print the arrival times to the terminal output.

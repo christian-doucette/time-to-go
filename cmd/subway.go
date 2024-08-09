@@ -13,7 +13,7 @@ import (
 
 // subwayCmd represents the subway command
 var subwayCmd = &cobra.Command{
-	Use:   "subway --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--bus YOUR_I2C_BUS] [--debug] [--least-minutes-ahead LEAST_MINUTES_AHEAD`]",
+	Use:   "subway --mta-api-key YOUR_MTA_API_KEY --stop-id YOUR_STOP_ID [--bus YOUR_I2C_BUS] [--debug] [--least-minutes-ahead LEAST_MINUTES_AHEAD]",
 	Short: "Display next subway times on OLED monitor via I2C",
 	Long: `This command will pull the next subway arrival times for a specific stop from the MTA API. 	
 If the debug option is included, it will print the arrival times to the terminal output.
