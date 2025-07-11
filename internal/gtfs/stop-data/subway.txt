@@ -89,9 +89,9 @@ stop_id,stop_name,stop_lat,stop_lon,location_type,parent_station
 132,14 St,40.737826,-74.000201,1,
 132N,14 St,40.737826,-74.000201,,132
 132S,14 St,40.737826,-74.000201,,132
-133,Christopher St-Sheridan Sq,40.733422,-74.002906,1,
-133N,Christopher St-Sheridan Sq,40.733422,-74.002906,,133
-133S,Christopher St-Sheridan Sq,40.733422,-74.002906,,133
+133,Christopher St-Stonewall,40.733422,-74.002906,1,
+133N,Christopher St-Stonewall,40.733422,-74.002906,,133
+133S,Christopher St-Stonewall,40.733422,-74.002906,,133
 134,Houston St,40.728251,-74.005367,1,
 134N,Houston St,40.728251,-74.005367,,134
 134S,Houston St,40.728251,-74.005367,,134
@@ -1043,9 +1043,9 @@ G35S,Clinton-Washington Avs,40.688089,-73.966839,,G35
 G36,Fulton St,40.687119,-73.975375,1,
 G36N,Fulton St,40.687119,-73.975375,,G36
 G36S,Fulton St,40.687119,-73.975375,,G36
-H01,Aqueduct Racetrack,40.668234,-73.834058,1,
-H01N,Aqueduct Racetrack,40.668234,-73.834058,,H01
-H01S,Aqueduct Racetrack,40.668234,-73.834058,,H01
+H01,Aqueduct Racetrack,40.672097,-73.835919,1,
+H01N,Aqueduct Racetrack,40.672097,-73.835919,,H01
+H01S,Aqueduct Racetrack,40.672097,-73.835919,,H01
 H02,Aqueduct-N Conduit Av,40.668234,-73.834058,1,
 H02N,Aqueduct-N Conduit Av,40.668234,-73.834058,,H02
 H02S,Aqueduct-N Conduit Av,40.668234,-73.834058,,H02
