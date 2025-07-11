@@ -21,12 +21,11 @@ If the debug option is not included, it will display the arrival times on an OLE
 	Run: func(cmd *cobra.Command, args []string) {
 		i2cBus, _ := cmd.Flags().GetInt("i2c-bus")
 		stopId, _ := cmd.Flags().GetString("stop-id")
-		mtaApiKey, _ := cmd.Flags().GetString("mta-api-key")
 		debug, _ := cmd.Flags().GetBool("debug")
 		leastMinutesAhead, _ := cmd.Flags().GetInt64("least-minutes-ahead")
 
 		// gets the subway arrival data right now
-		gtfsRaw := mta.CallBusRealtimeFeedApi(mtaApiKey)
+		gtfsRaw := mta.CallBusRealtimeFeedApi()
 
 		// parses out the next 4 arrival times for this stop
 		arrivalTimes := gtfs.ExtractBusStopArrivalTimes(gtfsRaw, stopId, 4, leastMinutesAhead)
@@ -45,14 +44,8 @@ If the debug option is not included, it will display the arrival times on an OLE
 func init() {
 	rootCmd.AddCommand(busCmd)
 
-	busCmd.Flags().String("mta-api-key", "", "API key used for calls to the MTA bus API")
-	err := busCmd.MarkFlagRequired("mta-api-key")
-	if err != nil {
-		os.Exit(1)
-	}
-
 	busCmd.Flags().String("stop-id", "", "Stop ID for the bus stop")
-	err = busCmd.MarkFlagRequired("stop-id")
+	err := busCmd.MarkFlagRequired("stop-id")
 	if err != nil {
 		os.Exit(1)
 	}

@@ -5,27 +5,18 @@ import (
 	"net/http"
 )
 
-// formats authorization header for MTA API subway request
-func subwayAuthorizationHeader(mtaSubwayApiKey string) [2]string {
-	return [2]string{"x-api-key", mtaSubwayApiKey}
-}
-
 // checks if status code from response is OK
 func ok(status int) bool {
 	return 200 <= status && status < 300
 }
 
 // makes HTTP GET request using the given url and headers
-func getRequest(url string, headers [][2]string) []byte {
+func getRequest(url string) []byte {
 	client := &http.Client{}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		panic(err.Error())
-	}
-
-	for _, header := range headers {
-		req.Header.Set(header[0], header[1])
 	}
 
 	resp, err := client.Do(req)
@@ -46,7 +37,7 @@ func getRequest(url string, headers [][2]string) []byte {
 }
 
 // calls all MTA API subway realtime feed endpoints and joins the results together
-func CallAllSubwayRealtimeFeedApis(mtaSubwayApiKey string) []byte {
+func CallAllSubwayRealtimeFeedApis() []byte {
 	subwayRealtimeFeedUrls := [8]string{
 		"https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace",
 		"https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm",
@@ -60,16 +51,14 @@ func CallAllSubwayRealtimeFeedApis(mtaSubwayApiKey string) []byte {
 
 	combinedFeedResponses := []byte{}
 
-	subwayHeaders := [][2]string{subwayAuthorizationHeader(mtaSubwayApiKey)}
-
 	for _, realtimeFeedUrl := range subwayRealtimeFeedUrls {
-		combinedFeedResponses = append(combinedFeedResponses, getRequest(realtimeFeedUrl, subwayHeaders)...)
+		combinedFeedResponses = append(combinedFeedResponses, getRequest(realtimeFeedUrl)...)
 	}
 
 	return combinedFeedResponses
 }
 
-func CallBusRealtimeFeedApi(mtaBusApiKey string) []byte {
-	busRealtimeFeedUrl := "https://gtfsrt.prod.obanyc.com/tripUpdates?key=" + mtaBusApiKey
-	return getRequest(busRealtimeFeedUrl, [][2]string{})
+func CallBusRealtimeFeedApi() []byte {
+	busRealtimeFeedUrl := "https://gtfsrt.prod.obanyc.com/tripUpdates"
+	return getRequest(busRealtimeFeedUrl)
 }
